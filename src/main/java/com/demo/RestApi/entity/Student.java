@@ -21,4 +21,12 @@ public class Student {
            cascade = CascadeType.ALL
    )
     private StudentProfile studentProfile;
+
+   @ManyToOne(
+
+   )
+   @JoinColumn(
+           name = "school_id"
+   )
+   private School school;
 }
