@@ -3,6 +3,7 @@ package com.demo.RestApi.entity;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
@@ -19,4 +20,6 @@ public class School {
     )
     @JsonManagedReference
     private List<Student> students;
+
+
 }
