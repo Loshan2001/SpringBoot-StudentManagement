@@ -1,6 +1,9 @@
 package com.demo.RestApi.controller;
 
 import com.demo.RestApi.dao.StudentDao;
+import com.demo.RestApi.dto.StudentDto;
+import com.demo.RestApi.dto.StudentResponseDto;
+import com.demo.RestApi.entity.School;
 import com.demo.RestApi.entity.Student;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,9 +22,40 @@ public class StudentController {
         this.studentDao = studentDao;
     }
 
+
+
     @PostMapping("/student/create")
-    public Student createStudent(@RequestBody Student student){
-        return  studentDao.save(student);
+    public StudentResponseDto createStudent(@RequestBody StudentDto stu){
+        var student = toStudent(stu);
+        var savedStudent = studentDao.save(student);
+        return studentResponseDto(savedStudent);
+    }
+
+    //    transform studentDto object into student object
+    private Student toStudent(StudentDto dto){
+        var student = new Student();
+        student.setFirstName(dto.firstName());
+        student.setLastName(dto.lastName());
+        student.setEmail(dto.email());
+        student.setAge(dto.age());
+    //   create school
+        var school = new School();
+        school.setId(dto.schoolId());
+    //assign to student
+        student.setSchool(school);
+        return student;
+
+    }
+
+    private StudentResponseDto studentResponseDto(Student student){
+        return new StudentResponseDto(
+                student.getFirstName(),
+                student.getLastName(),
+                student.getEmail(),
+                student.getAge(),
+                student.getSchool().getId()
+        );
+
     }
 
     @GetMapping("/student/getAll")
