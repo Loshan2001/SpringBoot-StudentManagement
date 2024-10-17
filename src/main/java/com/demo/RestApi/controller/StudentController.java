@@ -1,63 +1,45 @@
 package com.demo.RestApi.controller;
 
-import com.demo.RestApi.Transfomer.StudentsMapper;
-import com.demo.RestApi.dao.StudentDao;
+import com.demo.RestApi.Service.StudentService;
 import com.demo.RestApi.dto.StudentDto;
 import com.demo.RestApi.dto.StudentResponseDto;
-import com.demo.RestApi.entity.School;
-import com.demo.RestApi.entity.Student;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
+
 
 @RestController
 public class StudentController {
 
+    private final StudentService studentService;
 
-    @Autowired
-    private final StudentDao studentDao;
-
-    @Autowired
-    private final StudentsMapper studentsMapper;
-
-    public StudentController(StudentDao studentDao, StudentsMapper studentsMapper) {
-        this.studentDao = studentDao;
-        this.studentsMapper = studentsMapper;
+    public StudentController(StudentService studentService) {
+        this.studentService = studentService;
     }
-
-
 
     @PostMapping("/student/create")
-    public StudentResponseDto createStudent(@RequestBody StudentDto stu){
-        var student = studentsMapper.toStudent(stu);
-        var savedStudent = studentDao.save(student);
-        return studentsMapper.studentResponseDto(savedStudent);
+    public StudentResponseDto createStudent(@RequestBody StudentDto stu) {
+        return this.studentService.createStudent(stu);
     }
 
-
     @GetMapping("/student/getAll")
-    public List<Student> getAllStudents(){
-        return studentDao.findAll();
+    public List<StudentResponseDto> getAllStudents() {
+        return this.studentService.getAllStudents();
     }
 
     @GetMapping("/student/getStudent/{id}")
-    public Student getStudent(@PathVariable Integer id){
-        return studentDao.findById(id).
-                orElse(new Student());
+    public StudentResponseDto getStudent(@PathVariable Integer id) {
+        return studentService.getStudent(id);
     }
 
-    @GetMapping("/student/search/{student-name}")
-    public List<Student> getStudentByName(@PathVariable("student-name") String name){
-        return studentDao.findAllByfirstName(name);
+    @GetMapping("/student/search/{studentName}")
+    public List<StudentResponseDto> getStudentByName(@PathVariable("studentName") String name) {
+        return studentService.getStudentByName(name);
     }
 
-    @DeleteMapping("/student/delete/:id")
-    @ResponseStatus(HttpStatus.OK )
-    public void deleteStudent(@PathVariable int id){
-         studentDao.deleteById(id);
-
+    @DeleteMapping("/student/delete/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteStudent(@PathVariable int id) {
+        studentService.deleteStudent(id);
     }
-
 }

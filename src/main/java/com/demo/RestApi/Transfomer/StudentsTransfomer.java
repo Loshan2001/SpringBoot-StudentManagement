@@ -7,7 +7,7 @@ import com.demo.RestApi.entity.Student;
 import org.springframework.stereotype.Service;
 
 @Service
-public class StudentsMapper {
+public class StudentsTransfomer {
     //    transform studentDto object into student object
     public Student toStudent(StudentDto dto){
         var student = new Student();
