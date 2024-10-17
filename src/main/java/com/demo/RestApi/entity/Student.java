@@ -2,6 +2,7 @@ package com.demo.RestApi.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Entity
 @Table
@@ -15,4 +16,9 @@ public class Student {
     @Column(unique = true)
     private String email;
     private int age;
+   @OneToOne(
+           mappedBy = "student",
+           cascade = CascadeType.ALL
+   )
+    private StudentProfile studentProfile;
 }
