@@ -1,5 +1,6 @@
 package com.demo.RestApi.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -16,5 +17,6 @@ public class School {
     @OneToMany(
             mappedBy = "school"
     )
+    @JsonManagedReference
     private List<Student> students;
 }
